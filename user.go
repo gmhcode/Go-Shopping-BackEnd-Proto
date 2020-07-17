@@ -35,3 +35,18 @@ func AllUsers(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(users)
 	fmt.Fprintf(w, "All Users Endpoint Hit")
 }
+
+//NewUser Creates a new user
+func NewUser(w http.ResponseWriter, r *http.Request) {
+	if err != nil {
+		panic("Error in NewUser")
+	}
+	w.Header().Set("Content-Type", "application/json")
+	var user User
+	
+	//decodes the user from the body and turns it into data
+	json.NewDecoder(r.Body).Decode(&user)
+
+	db.Where("UUID = ?", user.UUID).FirstOrCreate(&user)
+	json.NewEncoder(w).Encode(user)
+}

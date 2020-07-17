@@ -9,6 +9,8 @@ import (
 
 func handleRequest() {
 	myRouter := mux.NewRouter().StrictSlash(true)
+	myRouter.HandleFunc("/users", AllUsers).Methods("GET")
+	myRouter.HandleFunc("/user", NewUser).Methods("POST")
 	log.Fatal(http.ListenAndServe(":8081", myRouter))
 }
 
