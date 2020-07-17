@@ -3,7 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
+
+	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
@@ -15,10 +18,11 @@ var err error
 type User struct {
 	gorm.Model
 	UUID       string 
-	listID     string
-	store      string
-	userSentID string
-	name       string
+	ListID     string
+	Store      string
+	UserSentID string
+	Name       string
+	Email 	   string
 }
 
 //AllUsers Returns all the users
@@ -29,7 +33,7 @@ func AllUsers(w http.ResponseWriter, r *http.Request) {
 	}
 	//Create an empty array of users
 	var users []User
-
+	
 	//Finds all users
 	db.Find(&users)
 	json.NewEncoder(w).Encode(users)
@@ -47,6 +51,69 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 	//decodes the user from the body and turns it into data
 	json.NewDecoder(r.Body).Decode(&user)
 
+	body, _ := ioutil.ReadAll(r.Body)
+	//prints the body data
+	fmt.Println(string(body))
+
+	//converts user into json
+	str, _ := json.Marshal(&user)
+	//prints the user json
+	fmt.Println(string(str))
+
 	db.Where("UUID = ?", user.UUID).FirstOrCreate(&user)
 	json.NewEncoder(w).Encode(user)
+}
+
+//GetUser - responds with a user
+func GetUser(w http.ResponseWriter, r *http.Request){
+	if err != nil {
+		panic("Error in NewUser")
+	}
+
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	var user User
+
+	db.Where("UUID = ?", id).Find(&user)
+	json.NewEncoder(w).Encode(&user)
+}
+
+//DeleteUser - Deletes user with given ID
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
+	if err != nil {
+		panic("Error in NewUser")
+	}
+
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	var user User
+
+	db.Where("UUID = ?", id).Find(&user)
+	db.Delete(&user)
+	fmt.Fprintf(w, "Delete User Endpoint Hit")
+}
+
+//UpdateUser - Updates user
+func UpdateUser(w http.ResponseWriter, r *http.Request){
+	
+	w.Header().Set("Content-Type", "application/json")
+
+	var userUpdates User
+	var user User
+
+	json.NewDecoder(r.Body).Decode(&userUpdates)
+
+	db.Where("UUID = ?", userUpdates.UUID).Find(&user)
+
+	user.ListID = userUpdates.ListID
+	user.Name = userUpdates.Name
+	user.Store = userUpdates.Store
+	user.UserSentID = userUpdates.UserSentID
+	user.Email = userUpdates.Email
+
+	db.Save(&user)
+	json.NewEncoder(w).Encode(user)
+	fmt.Fprintf(w, "Update User Endpoint Hit")
 }
