@@ -17,12 +17,12 @@ var err error
 //User Struct
 type User struct {
 	gorm.Model
-	UUID       string 
-	ListID     string
-	Store      string
-	UserSentID string
-	Name       string
-	Email 	   string
+	UUID       string `json:"uuid"`
+	ListID     string `json:"listID"`
+	Store      string `json:"store"`
+	UserSentID string `json:"userSentId"`
+	Name       string `json:"name"`
+	Email      string `json:"email"`
 }
 
 //AllUsers Returns all the users
@@ -33,7 +33,7 @@ func AllUsers(w http.ResponseWriter, r *http.Request) {
 	}
 	//Create an empty array of users
 	var users []User
-	
+
 	//Finds all users
 	db.Find(&users)
 	json.NewEncoder(w).Encode(users)
@@ -47,7 +47,7 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	var user User
-	
+
 	//decodes the user from the body and turns it into data
 	json.NewDecoder(r.Body).Decode(&user)
 
@@ -65,7 +65,7 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 }
 
 //GetUser - responds with a user
-func GetUser(w http.ResponseWriter, r *http.Request){
+func GetUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic("Error in NewUser")
 	}
@@ -96,8 +96,8 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 }
 
 //UpdateUser - Updates user
-func UpdateUser(w http.ResponseWriter, r *http.Request){
-	
+func UpdateUser(w http.ResponseWriter, r *http.Request) {
+
 	w.Header().Set("Content-Type", "application/json")
 
 	var userUpdates User
