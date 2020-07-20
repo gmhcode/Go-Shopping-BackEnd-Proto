@@ -27,12 +27,20 @@ func handleRequest() {
 	myRouter.HandleFunc("/item", UpdateItem).Methods("PUT")
 	myRouter.HandleFunc("/item/{id}", GetItem).Methods("GET")
 
+	myRouter.HandleFunc("/listMembers", AllListMembers).Methods("GET")
+	myRouter.HandleFunc("/listMember", NewListMember).Methods("POST")
+	myRouter.HandleFunc("/listMember/{id}", DeleteListMember).Methods("DELETE")
+	myRouter.HandleFunc("/listMember", UpdateListMember).Methods("PUT")
+	myRouter.HandleFunc("/listMember/{id}", GetListMember).Methods("GET")
+
 	log.Fatal(http.ListenAndServe(":8081", myRouter))
+
 }
 
 func main() {
 	println("Go ORM Tutorial")
 	InitialMigration()
 	handleRequest()
+
 	defer db.Close()
 }

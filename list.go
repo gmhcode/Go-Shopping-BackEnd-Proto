@@ -43,12 +43,12 @@ func NewList(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(string(body))
 
 	//converts user into json
-	str, _ := json.Marshal(&list)
+	str, _ := json.Marshal(list)
 	//prints the user json
 	fmt.Println(string(str))
 
 	db.Where("UUID = ?", list.UUID).FirstOrCreate(&list)
-	json.NewEncoder(w).Encode(&list)
+	json.NewEncoder(w).Encode(list)
 }
 
 //DeleteList - deletes list from ID

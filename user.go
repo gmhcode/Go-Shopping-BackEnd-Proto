@@ -16,12 +16,9 @@ var err error
 
 //User Struct
 type User struct {
-	UUID       string `json:"uuid"`
-	ListID     string `json:"listID"`
-	Store      string `json:"store"`
-	UserSentID string `json:"userSentId"`
-	Name       string `json:"name"`
-	Email      string `json:"email"`
+	UUID  string `json:"uuid"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
 }
 
 //AllUsers Returns all the users
@@ -106,10 +103,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	db.Where("UUID = ?", userUpdates.UUID).Find(&user)
 
-	user.ListID = userUpdates.ListID
 	user.Name = userUpdates.Name
-	user.Store = userUpdates.Store
-	user.UserSentID = userUpdates.UserSentID
 	user.Email = userUpdates.Email
 
 	db.Save(&user)
