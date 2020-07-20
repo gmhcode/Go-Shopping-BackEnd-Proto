@@ -7,13 +7,10 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-
-	"github.com/jinzhu/gorm"
 )
 
 //Item - Object
 type Item struct {
-	gorm.Model
 	UUID       string `json:"uuid"`
 	Store      string `json:"store"`
 	UserSentID string `json:"userSentId"`

@@ -16,7 +16,6 @@ var err error
 
 //User Struct
 type User struct {
-	gorm.Model
 	UUID       string `json:"uuid"`
 	ListID     string `json:"listID"`
 	Store      string `json:"store"`

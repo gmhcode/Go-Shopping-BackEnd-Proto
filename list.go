@@ -7,12 +7,10 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/jinzhu/gorm"
 )
 
 //List struct
 type List struct {
-	gorm.Model
 	UUID         string `json:"uuid"`
 	Title        string `json:"title"`
 	ListMasterID string `json:"listMasterID"`
