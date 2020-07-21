@@ -22,7 +22,7 @@ func AllListMembers(w http.ResponseWriter, r *http.Request) {
 
 	db.Find(&listMembers)
 	json.NewEncoder(w).Encode(listMembers)
-	fmt.Fprintf(w, "All listMembers Endpoint Hit")
+	// fmt.Fprintf(w, "All listMembers Endpoint Hit")
 }
 
 //NewListMember - Creates and saves new ListMember
@@ -43,6 +43,18 @@ func NewListMember(w http.ResponseWriter, r *http.Request) {
 	db.Where("ID = ?", listMember.ID).FirstOrCreate(&listMember)
 	// fmt.Println(string(str))
 	json.NewEncoder(w).Encode(listMember)
+}
+
+//CreateNewListMember - creates a new ListMember
+func CreateNewListMember(uID string, lID string) {
+
+	var listMember = ListMember{UserID: uID, ListID: lID, ID: uID + lID}
+
+	db.Where("ID = ?", listMember.ID).FirstOrCreate(listMember)
+
+	str, _ := json.Marshal(listMember)
+	//prints the user json
+	fmt.Println("listMember Created", string(str))
 }
 
 //DeleteListMember - Deletes ListMember

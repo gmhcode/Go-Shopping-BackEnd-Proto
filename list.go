@@ -48,6 +48,7 @@ func NewList(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(string(str))
 
 	db.Where("UUID = ?", list.UUID).FirstOrCreate(&list)
+	CreateNewListMember(list.ListMasterID, list.UUID)
 	json.NewEncoder(w).Encode(list)
 }
 

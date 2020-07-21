@@ -33,7 +33,7 @@ func AllUsers(w http.ResponseWriter, r *http.Request) {
 	//Finds all users
 	db.Find(&users)
 	json.NewEncoder(w).Encode(users)
-	fmt.Fprintf(w, "All Users Endpoint Hit")
+	// fmt.Fprintf(w, "All Users Endpoint Hit")
 }
 
 //NewUser Creates a new user
