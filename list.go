@@ -31,6 +31,19 @@ func AllLists(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "All lists Endpoint Hit")
 }
 
+//DeleteAllLists - Deletes All Lists
+func DeleteAllLists(w http.ResponseWriter, r *http.Request) {
+	var lists []List
+
+	db.Find(&lists)
+	print("User length ", len(lists))
+
+	for i, list := range lists {
+		fmt.Print(i, list.Title)
+		db.Delete(list)
+	}
+}
+
 //NewList Creates New List
 func NewList(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")

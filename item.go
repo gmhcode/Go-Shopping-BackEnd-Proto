@@ -30,6 +30,19 @@ func AllItems(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "All Items Endpoint Hit")
 }
 
+//DeleteAllItems - Deletes All Items
+func DeleteAllItems(w http.ResponseWriter, r *http.Request) {
+	var items []Item
+
+	db.Find(&items)
+	print("User length ", len(items))
+
+	for i, item := range items {
+		fmt.Print(i, item.Name)
+		db.Delete(item)
+	}
+}
+
 //NewItem - Creates a new item
 func NewItem(w http.ResponseWriter, r *http.Request) {
 

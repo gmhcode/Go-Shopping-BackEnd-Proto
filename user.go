@@ -75,6 +75,23 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&user)
 }
 
+//DeleteAllUsers - Deletes All Users
+func DeleteAllUsers(w http.ResponseWriter, r *http.Request) {
+	var users []User
+
+	db.Find(&users)
+	print("User length ", len(users))
+
+	if len(users) > 5 {
+		print("user 5 ", users[5].Name)
+	}
+
+	for i, user := range users {
+		fmt.Print(i, user.Name)
+		db.Delete(user)
+	}
+}
+
 //DeleteUser - Deletes user with given ID
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {

@@ -45,6 +45,19 @@ func NewListMember(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(listMember)
 }
 
+//DeleteAllListMembers - Deletes All ListMembers
+func DeleteAllListMembers(w http.ResponseWriter, r *http.Request) {
+	var listMembers []ListMember
+
+	db.Find(&listMembers)
+	print("listmember length ", len(listMembers))
+
+	for i, listMember := range listMembers {
+		fmt.Print(i, listMember)
+		db.Delete(listMember)
+	}
+}
+
 //CreateNewListMember - creates a new ListMember
 func CreateNewListMember(uID string, lID string) {
 
