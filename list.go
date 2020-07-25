@@ -11,7 +11,7 @@ import (
 
 //List struct
 type List struct {
-	UUID         string `json:"uuid"`
+	UUID         string `json:"uuid" gorm:"primary_key"`
 	Title        string `json:"title"`
 	ListMasterID string `json:"listMasterID"`
 }
@@ -96,7 +96,8 @@ func UpdateList(w http.ResponseWriter, r *http.Request) {
 	list.Title = updatedList.Title
 	list.ListMasterID = updatedList.ListMasterID
 
-	db.Save(&list)
+	db.Model(&list).Updates(updatedList)
+
 	json.NewEncoder(w).Encode(list)
 	fmt.Fprintf(w, "Update User Endpoint Hit")
 

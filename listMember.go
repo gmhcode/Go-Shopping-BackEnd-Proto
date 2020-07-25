@@ -13,7 +13,7 @@ import (
 type ListMember struct {
 	ListID string `json:"listID"`
 	UserID string `json:"userID"`
-	ID     string `json:"id"`
+	UUID   string `json:"uuid" gorm:"primary_key"`
 }
 
 //AllListMembers - Returns all list members
@@ -39,8 +39,8 @@ func NewListMember(w http.ResponseWriter, r *http.Request) {
 
 	// str, _ := json.Marshal(listMember)
 	//prints the user json
-	fmt.Println(listMember.ID)
-	db.Where("ID = ?", listMember.ID).FirstOrCreate(&listMember)
+	fmt.Println(listMember.UUID)
+	db.Where("ID = ?", listMember.UUID).FirstOrCreate(&listMember)
 	// fmt.Println(string(str))
 	json.NewEncoder(w).Encode(listMember)
 }
@@ -61,9 +61,9 @@ func DeleteAllListMembers(w http.ResponseWriter, r *http.Request) {
 //CreateNewListMember - creates a new ListMember
 func CreateNewListMember(uID string, lID string) {
 
-	var listMember = ListMember{UserID: uID, ListID: lID, ID: uID + lID}
+	var listMember = ListMember{UserID: uID, ListID: lID, UUID: uID + lID}
 
-	db.Where("ID = ?", listMember.ID).FirstOrCreate(listMember)
+	db.Where("ID = ?", listMember.UUID).FirstOrCreate(listMember)
 
 	str, _ := json.Marshal(listMember)
 	//prints the user json

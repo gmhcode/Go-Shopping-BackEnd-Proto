@@ -11,7 +11,7 @@ import (
 
 //Item - Object
 type Item struct {
-	UUID       string `json:"uuid"`
+	UUID       string `json:"uuid" gorm:"primary_key"`
 	Store      string `json:"store"`
 	UserSentID string `json:"userSentId"`
 	Name       string `json:"name"`
@@ -95,7 +95,9 @@ func UpdateItem(w http.ResponseWriter, r *http.Request) {
 	item.UserSentID = updatedItem.UserSentID
 	item.Name = updatedItem.Name
 	item.ListID = updatedItem.ListID
-	db.Save(&item)
+
+	db.Model(&item).Updates(updatedItem)
+
 	json.NewEncoder(w).Encode(item)
 	fmt.Fprintf(w, "Update User Endpoint Hit")
 

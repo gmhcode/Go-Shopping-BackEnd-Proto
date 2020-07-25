@@ -16,7 +16,7 @@ var err error
 
 //User Struct
 type User struct {
-	UUID  string `json:"uuid"`
+	UUID  string `json:"uuid" gorm:"primary_key"`
 	Name  string `json:"name"`
 	Email string `json:"email"`
 }
@@ -123,7 +123,8 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	user.Name = userUpdates.Name
 	user.Email = userUpdates.Email
 
-	db.Save(&user)
+	db.Model(&user).Updates(userUpdates)
 	json.NewEncoder(w).Encode(user)
-	fmt.Fprintf(w, "Update User Endpoint Hit")
+
+	// fmt.Fprintf(w, "Update User Endpoint Hit")
 }
