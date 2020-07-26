@@ -27,7 +27,7 @@ func AllItems(w http.ResponseWriter, r *http.Request) {
 
 	db.Find(&items)
 	json.NewEncoder(w).Encode(items)
-	fmt.Fprintf(w, "All Items Endpoint Hit")
+	// fmt.Fprintf(w, "All Items Endpoint Hit")
 }
 
 //DeleteAllItems - Deletes All Items

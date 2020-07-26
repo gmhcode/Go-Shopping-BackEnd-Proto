@@ -28,7 +28,7 @@ func AllLists(w http.ResponseWriter, r *http.Request) {
 	//Finds all users
 	db.Find(&lists)
 	json.NewEncoder(w).Encode(lists)
-	fmt.Fprintf(w, "All lists Endpoint Hit")
+	// fmt.Fprintf(w, "All lists Endpoint Hit")
 }
 
 //DeleteAllLists - Deletes All Lists
