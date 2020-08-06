@@ -15,6 +15,10 @@ type List struct {
 	Title        string `json:"title" gorm:"column:title"`
 	ListMasterID string `json:"listMasterID" gorm:"column:listMasterID"`
 }
+type ListAndItems struct {
+	Lists []List
+	Items []Item
+}
 
 //AllLists Returns all the users
 func AllLists(w http.ResponseWriter, r *http.Request) {
@@ -65,8 +69,8 @@ func NewList(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(list)
 }
 
-//GetListsWith - Gets all the lists for a specified UserID
-func GetListsWith(w http.ResponseWriter, r *http.Request) {
+//GetListsAndItemsWith - Gets all the lists for a specified UserID
+func GetListsAndItemsWith(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	userID := q.Get("userID")
 	var listMembers []ListMember
@@ -81,7 +85,19 @@ func GetListsWith(w http.ResponseWriter, r *http.Request) {
 		lists = append(lists, list)
 	}
 
-	json.NewEncoder(w).Encode(lists)
+	items := make([]Item, 0)
+
+	for _, list := range lists {
+		var itemArray []Item
+		db.Where("listID = ?", list.UUID).Find(&itemArray)
+		for _, item := range itemArray {
+			items = append(items, item)
+		}
+	}
+	var listAndItems = ListAndItems{lists, items}
+
+	json.NewEncoder(w).Encode(listAndItems)
+	// json.NewEncoder(w).Encode(items)
 }
 
 //DeleteList - deletes list from ID
