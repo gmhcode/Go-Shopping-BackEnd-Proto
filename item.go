@@ -12,10 +12,10 @@ import (
 //Item - Object
 type Item struct {
 	UUID       string `json:"uuid" gorm:"primary_key"`
-	Store      string `json:"store"`
-	UserSentID string `json:"userSentId"`
-	Name       string `json:"name"`
-	ListID     string `json:"listID"`
+	Store      string `json:"store" gorm:"column:store"`
+	UserSentID string `json:"userSentId" gorm:"column:userSentID"`
+	Name       string `json:"name" gorm:"column:name"`
+	ListID     string `json:"listID" gorm:"column:listID"`
 }
 
 //AllItems - returns all the items

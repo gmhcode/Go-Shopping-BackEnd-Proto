@@ -12,8 +12,8 @@ import (
 //List struct
 type List struct {
 	UUID         string `json:"uuid" gorm:"primary_key"`
-	Title        string `json:"title"`
-	ListMasterID string `json:"listMasterID"`
+	Title        string `json:"title" gorm:"column:title"`
+	ListMasterID string `json:"listMasterID" gorm:"column:listMasterID"`
 }
 
 //AllLists Returns all the users

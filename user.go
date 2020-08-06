@@ -17,8 +17,8 @@ var err error
 //User Struct
 type User struct {
 	UUID  string `json:"uuid" gorm:"primary_key"`
-	Name  string `json:"name"`
-	Email string `json:"email"`
+	Name  string `json:"name" gorm:"column:name"`
+	Email string `json:"email" gorm:"column:email"`
 }
 
 //AllUsers Returns all the users
@@ -40,21 +40,26 @@ func AllUsers(w http.ResponseWriter, r *http.Request) {
 //GetUserWith - Gets a user using the query parameters
 func GetUserWith(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
-
-	list := q.Get("foo")
-	println("queries", q)
-	fmt.Println("list ", list)
+	listID := q.Get("listID")
+	var listMembers []ListMember
 
 	if err != nil {
 		panic("Could not connect to the database")
 	}
-	//Create an empty array of users
-	var users []User
 
-	//Finds all users
-	db.Find(&users)
+	db.Where("listID = ?", listID).Find(&listMembers)
+
+	//Create an empty array of users
+	users := make([]User, 0)
+
+	for _, listMember := range listMembers {
+
+		var user User
+		db.Where("UUID = ?", listMember.UserID).Find(&user)
+		users = append(users, user)
+	}
+
 	json.NewEncoder(w).Encode(users)
-	// fmt.Fprintf(w, "All Users Endpoint Hit")
 }
 
 //NewUser Creates a new user
@@ -102,10 +107,6 @@ func DeleteAllUsers(w http.ResponseWriter, r *http.Request) {
 
 	db.Find(&users)
 	print("User length ", len(users))
-
-	if len(users) > 5 {
-		print("user 5 ", users[5].Name)
-	}
 
 	for i, user := range users {
 		fmt.Print(i, user.Name)

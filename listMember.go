@@ -11,8 +11,8 @@ import (
 
 //ListMember - Connects the lists to the users, so we can know which user is a member of their respective lists
 type ListMember struct {
-	ListID string `json:"listID"`
-	UserID string `json:"userID"`
+	ListID string `json:"listID" gorm:"column:listID"`
+	UserID string `json:"userID" gorm:"column:userID"`
 	UUID   string `json:"uuid" gorm:"primary_key"`
 }
 
@@ -40,7 +40,7 @@ func NewListMember(w http.ResponseWriter, r *http.Request) {
 	// str, _ := json.Marshal(listMember)
 	//prints the user json
 	fmt.Println(listMember.UUID)
-	db.Where("ID = ?", listMember.UUID).FirstOrCreate(&listMember)
+	db.Where("UUID = ?", listMember.UUID).FirstOrCreate(&listMember)
 	// fmt.Println(string(str))
 	json.NewEncoder(w).Encode(listMember)
 }
@@ -63,7 +63,7 @@ func CreateNewListMember(uID string, lID string) {
 
 	var listMember = ListMember{UserID: uID, ListID: lID, UUID: uID + lID}
 
-	db.Where("ID = ?", listMember.UUID).FirstOrCreate(listMember)
+	db.Where("UUID = ?", listMember.UUID).FirstOrCreate(listMember)
 
 	str, _ := json.Marshal(listMember)
 	//prints the user json
@@ -75,7 +75,7 @@ func DeleteListMember(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 	var listMember ListMember
-	db.Where("ID = ?", id).Find(&listMember)
+	db.Where("UUID = ?", id).Find(&listMember)
 	db.Delete(listMember)
 	fmt.Fprintf(w, "Delete User Endpoint Hit")
 }
