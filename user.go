@@ -23,6 +23,27 @@ type User struct {
 
 //AllUsers Returns all the users
 func AllUsers(w http.ResponseWriter, r *http.Request) {
+	println("ALL HIT")
+
+	if err != nil {
+		panic("Could not connect to the database")
+	}
+	//Create an empty array of users
+	var users []User
+
+	//Finds all users
+	db.Find(&users)
+	json.NewEncoder(w).Encode(users)
+	// fmt.Fprintf(w, "All Users Endpoint Hit")
+}
+
+//GetUserWith - Gets a user using the query parameters
+func GetUserWith(w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query()
+
+	list := q.Get("foo")
+	println("queries", q)
+	fmt.Println("list ", list)
 
 	if err != nil {
 		panic("Could not connect to the database")

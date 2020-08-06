@@ -118,8 +118,3 @@ func GetItem(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&item)
 
 }
-
-// Store      string `json:"store"`
-// 	UserSentID string `json:"userSentId"`
-// 	Name       string `json:"name"`
-// 	ListID     string `json:"listID"`
