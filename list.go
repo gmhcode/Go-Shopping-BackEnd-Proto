@@ -65,6 +65,25 @@ func NewList(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(list)
 }
 
+//GetListsWith - Gets all the lists for a specified UserID
+func GetListsWith(w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query()
+	userID := q.Get("userID")
+	var listMembers []ListMember
+
+	db.Where("userID = ?", userID).Find(&listMembers)
+
+	lists := make([]List, 0)
+
+	for _, listMember := range listMembers {
+		var list List
+		db.Where("UUID = ?", listMember.ListID).Find(&list)
+		lists = append(lists, list)
+	}
+
+	json.NewEncoder(w).Encode(lists)
+}
+
 //DeleteList - deletes list from ID
 func DeleteList(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
