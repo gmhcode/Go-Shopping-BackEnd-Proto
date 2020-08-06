@@ -10,7 +10,7 @@ import (
 func handleRequest() {
 	myRouter := mux.NewRouter().StrictSlash(true)
 	myRouter.HandleFunc("/users", AllUsers).Methods("GET")
-	myRouter.HandleFunc("/users/query", GetUserWith).Methods("GET").Queries("listID", "{listID}")
+	myRouter.HandleFunc("/users/query", GetUsersWith).Methods("GET").Queries("listID", "{listID}")
 	myRouter.HandleFunc("/user/{id}", GetUser).Methods("GET")
 	myRouter.HandleFunc("/user", NewUser).Methods("POST")
 	myRouter.HandleFunc("/user/{id}", DeleteUser).Methods("DELETE")

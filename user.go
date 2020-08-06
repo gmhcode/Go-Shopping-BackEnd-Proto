@@ -37,8 +37,8 @@ func AllUsers(w http.ResponseWriter, r *http.Request) {
 	// fmt.Fprintf(w, "All Users Endpoint Hit")
 }
 
-//GetUserWith - Gets a user using the query parameters
-func GetUserWith(w http.ResponseWriter, r *http.Request) {
+//GetUsersWith - Gets a user using the query parameters
+func GetUsersWith(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	listID := q.Get("listID")
 	var listMembers []ListMember
