@@ -90,9 +90,10 @@ func GetListsAndItemsWith(w http.ResponseWriter, r *http.Request) {
 	for _, list := range lists {
 		var itemArray []Item
 		db.Where("listID = ?", list.UUID).Find(&itemArray)
-		for _, item := range itemArray {
-			items = append(items, item)
-		}
+		// for _, item := range itemArray {
+		// 	items = append(items, item)
+		// }
+		items = append(items, itemArray...)
 	}
 	var listAndItems = ListAndItems{lists, items}
 

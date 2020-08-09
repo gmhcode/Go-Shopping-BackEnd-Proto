@@ -30,6 +30,23 @@ func AllItems(w http.ResponseWriter, r *http.Request) {
 	// fmt.Fprintf(w, "All Items Endpoint Hit")
 }
 
+//GetItemsWith - Gets all the items with list ID, or User ID
+func GetItemsWith(w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query()
+	userID := q.Get("userID")
+	listID := q.Get("listID")
+
+	var items []Item
+
+	if userID != "" {
+		db.Where("userSentID = ?", userID).Find(&items)
+		json.NewEncoder(w).Encode(items)
+	} else {
+		db.Where("listID = ?", listID).Find(&items)
+		json.NewEncoder(w).Encode(items)
+	}
+}
+
 //DeleteAllItems - Deletes All Items
 func DeleteAllItems(w http.ResponseWriter, r *http.Request) {
 	var items []Item

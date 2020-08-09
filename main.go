@@ -26,6 +26,7 @@ func handleRequest() {
 	myRouter.HandleFunc("/lists", DeleteAllLists).Methods("DELETE")
 
 	myRouter.HandleFunc("/items", AllItems).Methods("GET")
+	myRouter.HandleFunc("/items/query", GetItemsWith).Methods("GET").Queries("userID", "{userID}", "listID", "{listID}")
 	myRouter.HandleFunc("/item", NewItem).Methods("POST")
 	myRouter.HandleFunc("/item/{id}", DeleteItem).Methods("DELETE")
 	myRouter.HandleFunc("/item", UpdateItem).Methods("PUT")
