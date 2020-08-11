@@ -15,6 +15,8 @@ type List struct {
 	Title        string `json:"title" gorm:"column:title"`
 	ListMasterID string `json:"listMasterID" gorm:"column:listMasterID"`
 }
+
+//ListAndItems struct
 type ListAndItems struct {
 	Lists []List
 	Items []Item
@@ -90,15 +92,12 @@ func GetListsAndItemsWith(w http.ResponseWriter, r *http.Request) {
 	for _, list := range lists {
 		var itemArray []Item
 		db.Where("listID = ?", list.UUID).Find(&itemArray)
-		// for _, item := range itemArray {
-		// 	items = append(items, item)
-		// }
+
 		items = append(items, itemArray...)
 	}
 	var listAndItems = ListAndItems{lists, items}
 
 	json.NewEncoder(w).Encode(listAndItems)
-	// json.NewEncoder(w).Encode(items)
 }
 
 //DeleteList - deletes list from ID
