@@ -41,7 +41,8 @@ func DeleteAll(w http.ResponseWriter, r *http.Request) {
 	var listMembers []ListMember
 	db.Find(&listMembers)
 	for i, listMember := range listMembers {
-		fmt.Print(i, listMember)
+		fmt.Println(i, listMember)
 		db.Delete(listMember)
 	}
+	println("deleteAllHit")
 }
