@@ -141,7 +141,6 @@ func UpdateList(w http.ResponseWriter, r *http.Request) {
 
 }
 
-
 //GetList - responds with a list
 func GetList(w http.ResponseWriter, r *http.Request) {
 	if err != nil {

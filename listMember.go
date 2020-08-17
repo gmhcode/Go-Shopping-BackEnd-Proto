@@ -25,6 +25,24 @@ func AllListMembers(w http.ResponseWriter, r *http.Request) {
 	// fmt.Fprintf(w, "All listMembers Endpoint Hit")
 }
 
+// GetListMembersWithList - Gets all the listMembers for the provided lists
+func GetListMembersWithList(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	var lists []List
+
+	json.NewDecoder(r.Body).Decode(&lists)
+
+	var listMembers = make([]ListMember, 0)
+
+	for _, list := range lists {
+		var listMemberArray []ListMember
+		db.Where("listID = ?", list.UUID).Find(&listMemberArray)
+		listMembers = append(listMembers, listMemberArray...)
+	}
+	json.NewEncoder(w).Encode(listMembers)
+}
+
 //NewListMember - Creates and saves new ListMember
 func NewListMember(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
