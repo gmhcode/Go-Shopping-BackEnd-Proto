@@ -25,8 +25,8 @@ func AllListMembers(w http.ResponseWriter, r *http.Request) {
 	// fmt.Fprintf(w, "All listMembers Endpoint Hit")
 }
 
-// GetListMembersWithList - Gets all the listMembers for the provided lists
-func GetListMembersWithList(w http.ResponseWriter, r *http.Request) {
+// GetListMembersWithLists - Gets all the listMembers for the provided lists
+func GetListMembersWithLists(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var lists []List
@@ -111,7 +111,6 @@ func UpdateListMember(w http.ResponseWriter, r *http.Request) {
 // }
 
 //GetListMember - Gets a specific list member
-
 func GetListMember(w http.ResponseWriter, r *http.Request) {
 
 }

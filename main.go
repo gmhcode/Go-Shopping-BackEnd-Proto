@@ -34,7 +34,7 @@ func handleRequest() {
 	myRouter.HandleFunc("/items", DeleteAllItems).Methods("DELETE")
 
 	myRouter.HandleFunc("/listMembers", AllListMembers).Methods("GET")
-	myRouter.HandleFunc("/listMembers/withLists", DeleteAllListMembers).Methods("Get")
+	myRouter.HandleFunc("/listMembers/withLists", GetListMembersWithLists).Methods("Get")
 	myRouter.HandleFunc("/listMember", NewListMember).Methods("POST")
 	myRouter.HandleFunc("/listMember/{id}", DeleteListMember).Methods("DELETE")
 	myRouter.HandleFunc("/listMember", UpdateListMember).Methods("PUT")

@@ -100,7 +100,7 @@ func GetListsAndItemsAndLMsWith(w http.ResponseWriter, r *http.Request) {
 		listMembers = append(listMembers, listMemberArray...)
 	}
 	var listAndItems = ListAndItemsAndListMembers{lists, items, listMembers}
-
+	println("GetListsAndItemsAndLMsWith Hit")
 	json.NewEncoder(w).Encode(listAndItems)
 }
 
