@@ -85,7 +85,15 @@ func UpdateListMember(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// //GetListMembersWithList - Gets All list members for specified list
+// func GetListMembersWithList(list List) []ListMember {
+// 	listMembers := make([]ListMember, 0)
+
+// 	db.Where("")
+// }
+
 //GetListMember - Gets a specific list member
+
 func GetListMember(w http.ResponseWriter, r *http.Request) {
 
 }

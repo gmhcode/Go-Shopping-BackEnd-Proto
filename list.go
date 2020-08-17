@@ -16,10 +16,11 @@ type List struct {
 	ListMasterID string `json:"listMasterID" gorm:"column:listMasterID"`
 }
 
-//ListAndItems struct
-type ListAndItems struct {
-	Lists []List
-	Items []Item
+//ListAndItemsAndListMembers struct
+type ListAndItemsAndListMembers struct {
+	Lists       []List
+	Items       []Item
+	ListMembers []ListMember
 }
 
 //AllLists Returns all the users
@@ -71,31 +72,34 @@ func NewList(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(list)
 }
 
-//GetListsAndItemsWith - Gets all the lists for a specified UserID
-func GetListsAndItemsWith(w http.ResponseWriter, r *http.Request) {
+//GetListsAndItemsAndLMsWith - Gets all the lists and items and listMembers for a specified UserID..and listID associated with the user ID
+func GetListsAndItemsAndLMsWith(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	userID := q.Get("userID")
-	var listMembers []ListMember
+	var listMembersForUser []ListMember
 
-	db.Where("userID = ?", userID).Find(&listMembers)
+	db.Where("userID = ?", userID).Find(&listMembersForUser)
 
 	lists := make([]List, 0)
 
-	for _, listMember := range listMembers {
+	for _, listMember := range listMembersForUser {
 		var list List
 		db.Where("UUID = ?", listMember.ListID).Find(&list)
 		lists = append(lists, list)
 	}
 
 	items := make([]Item, 0)
+	listMembers := make([]ListMember, 0)
 
 	for _, list := range lists {
 		var itemArray []Item
+		var listMemberArray []ListMember
 		db.Where("listID = ?", list.UUID).Find(&itemArray)
-
+		db.Where("listID = ?", list.UUID).Find(&listMemberArray)
 		items = append(items, itemArray...)
+		listMembers = append(listMembers, listMemberArray...)
 	}
-	var listAndItems = ListAndItems{lists, items}
+	var listAndItems = ListAndItemsAndListMembers{lists, items, listMembers}
 
 	json.NewEncoder(w).Encode(listAndItems)
 }
@@ -130,13 +134,13 @@ func UpdateList(w http.ResponseWriter, r *http.Request) {
 	list.UUID = updatedList.UUID
 	list.Title = updatedList.Title
 	list.ListMasterID = updatedList.ListMasterID
-
 	db.Model(&list).Updates(updatedList)
 
 	json.NewEncoder(w).Encode(list)
 	fmt.Fprintf(w, "Update User Endpoint Hit")
 
 }
+
 
 //GetList - responds with a list
 func GetList(w http.ResponseWriter, r *http.Request) {
