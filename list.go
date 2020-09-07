@@ -47,14 +47,19 @@ func DeleteAllLists(w http.ResponseWriter, r *http.Request) {
 
 	for i, list := range lists {
 		fmt.Print(i, list.Title)
+		DeleteAllLMLocal(list)
 		db.Delete(list)
 	}
+	println("Delete All Lists Hit")
 }
 
 //NewList Creates New List
 func NewList(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
+	if err != nil {
+		panic("Could not connect to the database")
+	}
 	var list List
 	json.NewDecoder(r.Body).Decode(&list)
 
@@ -64,8 +69,9 @@ func NewList(w http.ResponseWriter, r *http.Request) {
 
 	//converts user into json
 	str, _ := json.Marshal(list)
+
 	//prints the user json
-	fmt.Println(string(str))
+	fmt.Println("printing JSON", string(str))
 
 	db.Where("UUID = ?", list.UUID).FirstOrCreate(&list)
 	CreateNewListMember(list.ListMasterID, list.UUID)
@@ -117,6 +123,7 @@ func DeleteList(w http.ResponseWriter, r *http.Request) {
 
 	db.Where("UUID = ?", id).Find(&list)
 	db.Delete(&list)
+	DeleteAllLMLocal(list)
 	fmt.Fprintf(w, "Delete User Endpoint Hit")
 }
 

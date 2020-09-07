@@ -76,13 +76,24 @@ func DeleteAllListMembers(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//DeleteAllLMLocal - locally deletes all list members
+func DeleteAllLMLocal(list List) {
+	var listMembers []ListMember
+
+	db.Where("ListID = ?", list.UUID).Find(&listMembers)
+
+	for i, listMember := range listMembers {
+		fmt.Print("Deleting: ", i, list.Title)
+		db.Delete(listMember)
+	}
+	db.Delete(list)
+}
+
 //CreateNewListMember - creates a new ListMember
 func CreateNewListMember(uID string, lID string) {
-
 	var listMember = ListMember{UserID: uID, ListID: lID, UUID: uID + lID}
 
 	db.Where("UUID = ?", listMember.UUID).FirstOrCreate(listMember)
-
 	str, _ := json.Marshal(listMember)
 	//prints the user json
 	fmt.Println("listMember Created", string(str))
