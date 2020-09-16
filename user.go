@@ -116,6 +116,7 @@ func DeleteAllUsers(w http.ResponseWriter, r *http.Request) {
 
 //DeleteUser - Deletes user with given ID
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
+	println("delete hit")
 	if err != nil {
 		panic("Error in NewUser")
 	}
