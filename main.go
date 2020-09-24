@@ -48,7 +48,6 @@ func handleRequest() {
 }
 
 func main() {
-	println("Go ORM Tutorial")
 	InitialMigration()
 	handleRequest()
 
