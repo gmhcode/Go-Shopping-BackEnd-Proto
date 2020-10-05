@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -48,6 +49,7 @@ func handleRequest() {
 }
 
 func main() {
+	fmt.Println("Database rdy")
 	InitialMigration()
 	handleRequest()
 
