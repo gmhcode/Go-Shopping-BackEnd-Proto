@@ -39,10 +39,15 @@ func GetItemsWith(w http.ResponseWriter, r *http.Request) {
 	var items []Item
 
 	if userID != "" {
+		fmt.Println("Hit")
 		db.Where("userSentID = ?", userID).Find(&items)
 		json.NewEncoder(w).Encode(items)
 	} else {
+		fmt.Println("lists hit")
 		db.Where("listID = ?", listID).Find(&items)
+		for _, item := range items {
+			fmt.Println(item.ListID)
+		}
 		json.NewEncoder(w).Encode(items)
 	}
 }
