@@ -42,7 +42,7 @@ func GetUsersWith(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	listID := q.Get("listID")
 	var listMembers []ListMember
-
+	fmt.Println("Get users with list hit")
 	if err != nil {
 		panic("Could not connect to the database")
 	}
@@ -58,7 +58,7 @@ func GetUsersWith(w http.ResponseWriter, r *http.Request) {
 		db.Where("UUID = ?", listMember.UserID).Find(&user)
 		users = append(users, user)
 	}
-
+	fmt.Println(len(users))
 	json.NewEncoder(w).Encode(users)
 }
 

@@ -157,8 +157,8 @@ func GetList(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	uuid := vars["id"]
 
-	var list List
-
-	db.Where("UUID = ?", uuid).Find(&list)
-	json.NewEncoder(w).Encode(&list)
+	var lists []List
+	fmt.Println("Get List Hit")
+	db.Where("ListMasterID = ?", uuid).Find(&lists)
+	json.NewEncoder(w).Encode(&lists)
 }
