@@ -94,7 +94,8 @@ func DeleteItem(w http.ResponseWriter, r *http.Request) {
 
 	db.Where("UUID = ?", id).Find(&item)
 	db.Delete(&item)
-	fmt.Fprintf(w, "Delete User Endpoint Hit")
+	// fmt.Fprintf(w, "Delete User Endpoint Hit")
+	json.NewEncoder(w).Encode(&item)
 }
 
 //UpdateItem - updates the item in the body
