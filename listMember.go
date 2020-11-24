@@ -86,7 +86,7 @@ func DeleteAllLMLocal(list List) {
 		fmt.Print("Deleting: ", i, list.Title)
 		db.Delete(listMember)
 	}
-	db.Delete(list)
+	// db.Delete(list)
 }
 
 //CreateNewListMember - creates a new ListMember

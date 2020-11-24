@@ -124,7 +124,8 @@ func DeleteList(w http.ResponseWriter, r *http.Request) {
 	db.Where("UUID = ?", id).Find(&list)
 	db.Delete(&list)
 	DeleteAllLMLocal(list)
-	fmt.Fprintf(w, "Delete User Endpoint Hit")
+	// fmt.Fprintf(w, "Delete User Endpoint Hit")
+	json.NewEncoder(w).Encode(list)
 }
 
 //UpdateList - Updates List
