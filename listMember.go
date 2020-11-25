@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -43,7 +42,7 @@ func GetListMembersWithLists(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(listMembers)
 }
 
-//NewListMember - Creates and saves new ListMember
+//NewListMember - Creates and saves new ListMember (adds a member to a list)
 func NewListMember(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -51,15 +50,14 @@ func NewListMember(w http.ResponseWriter, r *http.Request) {
 
 	json.NewDecoder(r.Body).Decode(&listMember)
 
-	body, _ := ioutil.ReadAll(r.Body)
 	//prints the body data
-	fmt.Println(string(body))
-
-	// str, _ := json.Marshal(listMember)
+	fmt.Println("printing body")
+	fmt.Println(listMember.UserID)
+	// listMember.UUID = listMember.UserID + listMember.ListID
+	listMember = CreateNewListMember(listMember.UserID, listMember.ListID)
 	//prints the user json
-	fmt.Println(listMember.UUID)
-	db.Where("UUID = ?", listMember.UUID).FirstOrCreate(&listMember)
-	// fmt.Println(string(str))
+	// db.Where("UUID = ?", listMember.UUID).FirstOrCreate(&listMember)
+
 	json.NewEncoder(w).Encode(listMember)
 }
 
@@ -90,13 +88,14 @@ func DeleteAllLMLocal(list List) {
 }
 
 //CreateNewListMember - creates a new ListMember
-func CreateNewListMember(uID string, lID string) {
+func CreateNewListMember(uID string, lID string) ListMember {
 	var listMember = ListMember{UserID: uID, ListID: lID, UUID: uID + lID}
 
 	db.Where("UUID = ?", listMember.UUID).FirstOrCreate(listMember)
 	str, _ := json.Marshal(listMember)
 	//prints the user json
 	fmt.Println("listMember Created", string(str))
+	return listMember
 }
 
 //DeleteListMember - Deletes ListMember
