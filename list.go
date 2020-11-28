@@ -11,9 +11,10 @@ import (
 
 //List struct
 type List struct {
-	UUID         string `json:"uuid" gorm:"primary_key"`
-	Title        string `json:"title" gorm:"column:title"`
-	ListMasterID string `json:"listMasterID" gorm:"column:listMasterID"`
+	UUID           string `json:"uuid" gorm:"primary_key"`
+	Title          string `json:"title" gorm:"column:title"`
+	ListMasterID   string `json:"listMasterID" gorm:"column:listMasterID"`
+	JoinerPassword string `json:"joinerPassword" gorm:"column:joinerPassword"`
 }
 
 //ListAndItemsAndListMembers struct
@@ -36,6 +37,27 @@ func AllLists(w http.ResponseWriter, r *http.Request) {
 	db.Find(&lists)
 	json.NewEncoder(w).Encode(lists)
 	// fmt.Fprintf(w, "All lists Endpoint Hit")
+}
+
+//GetJoinerPassword - Encodes and posts a list which matched the joiner password
+func GetJoinerPassword(w http.ResponseWriter, r *http.Request) {
+	// var user User
+	vars := mux.Vars(r)
+
+	joinerPassword := vars["joinerPassword"]
+	var list List
+	db.Where("JoinerPassword = ?", joinerPassword).Find(&list)
+
+	fmt.Println("list title ", list.Title)
+	fmt.Println("list ListMasterID ", list.ListMasterID)
+	fmt.Println("list JoinerPassword ", list.JoinerPassword)
+	fmt.Println("list UUID ", list.UUID)
+	if list.UUID == "" {
+		//TODO: THROW SERVER ERROR HERE
+	} else {
+		json.NewEncoder(w).Encode(list)
+	}
+
 }
 
 //DeleteAllLists - Deletes All Lists
@@ -91,7 +113,15 @@ func GetListsAndItemsAndLMsWith(w http.ResponseWriter, r *http.Request) {
 	for _, listMember := range listMembersForUser {
 		var list List
 		db.Where("UUID = ?", listMember.ListID).Find(&list)
-		lists = append(lists, list)
+		fmt.Println("list member UUID", listMember.UUID)
+		fmt.Println("list title ", list.Title)
+		fmt.Println("list UUID ", list.UUID)
+		fmt.Println("listmember listID ", listMember.ListID)
+
+		if list.UUID == listMember.ListID {
+			lists = append(lists, list)
+		}
+
 	}
 
 	items := make([]Item, 0)

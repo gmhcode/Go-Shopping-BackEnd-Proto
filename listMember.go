@@ -42,25 +42,6 @@ func GetListMembersWithLists(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(listMembers)
 }
 
-//NewListMember - Creates and saves new ListMember (adds a member to a list)
-func NewListMember(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
-	var listMember ListMember
-
-	json.NewDecoder(r.Body).Decode(&listMember)
-
-	//prints the body data
-	fmt.Println("printing body")
-	fmt.Println(listMember.UserID)
-	// listMember.UUID = listMember.UserID + listMember.ListID
-	listMember = CreateNewListMember(listMember.UserID, listMember.ListID)
-	//prints the user json
-	// db.Where("UUID = ?", listMember.UUID).FirstOrCreate(&listMember)
-
-	json.NewEncoder(w).Encode(listMember)
-}
-
 //DeleteAllListMembers - Deletes All ListMembers
 func DeleteAllListMembers(w http.ResponseWriter, r *http.Request) {
 	var listMembers []ListMember
@@ -87,11 +68,28 @@ func DeleteAllLMLocal(list List) {
 	// db.Delete(list)
 }
 
+//NewListMember - Creates and saves new ListMember (adds a member to a list)
+func NewListMember(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	var listMember ListMember
+
+	json.NewDecoder(r.Body).Decode(&listMember)
+
+	// listMember.UUID = listMember.UserID + listMember.ListID
+	listMember = CreateNewListMember(listMember.UserID, listMember.ListID)
+	//prints the user json
+	// db.Where("UUID = ?", listMember.UUID).FirstOrCreate(&listMember)
+
+	json.NewEncoder(w).Encode(listMember)
+}
+
 //CreateNewListMember - creates a new ListMember
 func CreateNewListMember(uID string, lID string) ListMember {
 	var listMember = ListMember{UserID: uID, ListID: lID, UUID: uID + lID}
 
-	db.Where("UUID = ?", listMember.UUID).FirstOrCreate(listMember)
+	db.Where("UUID = ?", listMember.UUID).FirstOrCreate(&listMember)
+	fmt.Println("listmember list ID", listMember.ListID)
 	str, _ := json.Marshal(listMember)
 	//prints the user json
 	fmt.Println("listMember Created", string(str))
