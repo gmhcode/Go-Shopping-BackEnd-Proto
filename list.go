@@ -83,6 +83,7 @@ func NewList(w http.ResponseWriter, r *http.Request) {
 		panic("Could not connect to the database")
 	}
 	var list List
+	var user User
 	json.NewDecoder(r.Body).Decode(&list)
 
 	body, _ := ioutil.ReadAll(r.Body)
@@ -96,7 +97,9 @@ func NewList(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("printing JSON", string(str))
 
 	db.Where("UUID = ?", list.UUID).FirstOrCreate(&list)
-	CreateNewListMember(list.ListMasterID, list.UUID)
+	db.Where("UUID = ?", list.ListMasterID).Find(&user)
+
+	CreateNewListMember(list.ListMasterID, list.UUID, user.Name)
 	json.NewEncoder(w).Encode(list)
 }
 
