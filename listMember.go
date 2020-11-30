@@ -10,9 +10,10 @@ import (
 
 //ListMember - Connects the lists to the users, so we can know which user is a member of their respective lists
 type ListMember struct {
-	ListID string `json:"listID" gorm:"column:listID"`
-	UserID string `json:"userID" gorm:"column:userID"`
-	UUID   string `json:"uuid" gorm:"primary_key"`
+	ListID   string `json:"listID" gorm:"column:listID"`
+	UserID   string `json:"userID" gorm:"column:userID"`
+	UUID     string `json:"uuid" gorm:"primary_key"`
+	UserName string `json:"userName" gorm:"column:userName"`
 }
 
 //AllListMembers - Returns all list members
@@ -33,12 +34,13 @@ func GetListMembersWithLists(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&lists)
 
 	var listMembers = make([]ListMember, 0)
-
+	fmt.Println("lists ", lists)
 	for _, list := range lists {
 		var listMemberArray []ListMember
 		db.Where("listID = ?", list.UUID).Find(&listMemberArray)
 		listMembers = append(listMembers, listMemberArray...)
 	}
+	fmt.Println("listmembers ", listMembers)
 	json.NewEncoder(w).Encode(listMembers)
 }
 
@@ -77,7 +79,7 @@ func NewListMember(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&listMember)
 
 	// listMember.UUID = listMember.UserID + listMember.ListID
-	listMember = CreateNewListMember(listMember.UserID, listMember.ListID)
+	listMember = CreateNewListMember(listMember.UserID, listMember.ListID, listMember.UserName)
 	//prints the user json
 	// db.Where("UUID = ?", listMember.UUID).FirstOrCreate(&listMember)
 
@@ -85,14 +87,15 @@ func NewListMember(w http.ResponseWriter, r *http.Request) {
 }
 
 //CreateNewListMember - creates a new ListMember
-func CreateNewListMember(uID string, lID string) ListMember {
-	var listMember = ListMember{UserID: uID, ListID: lID, UUID: uID + lID}
+func CreateNewListMember(uID string, lID string, uName string) ListMember {
+	var listMember = ListMember{UserID: uID, ListID: lID, UUID: uID + lID, UserName: uName}
 
 	db.Where("UUID = ?", listMember.UUID).FirstOrCreate(&listMember)
 	fmt.Println("listmember list ID", listMember.ListID)
-	str, _ := json.Marshal(listMember)
+	// str, _ := json.Marshal(listMember)
 	//prints the user json
-	fmt.Println("listMember Created", string(str))
+	// fmt.Println("listMember Created", string(str))
+	fmt.Println("listMember username ", listMember.UserName)
 	return listMember
 }
 
