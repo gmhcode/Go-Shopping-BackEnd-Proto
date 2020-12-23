@@ -48,10 +48,10 @@ func GetJoinerPassword(w http.ResponseWriter, r *http.Request) {
 	var list List
 	db.Where("JoinerPassword = ?", joinerPassword).Find(&list)
 
-	fmt.Println("list title ", list.Title)
-	fmt.Println("list ListMasterID ", list.ListMasterID)
-	fmt.Println("list JoinerPassword ", list.JoinerPassword)
-	fmt.Println("list UUID ", list.UUID)
+	// fmt.Println("list title ", list.Title)
+	// fmt.Println("list ListMasterID ", list.ListMasterID)
+	// fmt.Println("list JoinerPassword ", list.JoinerPassword)
+	// fmt.Println("list UUID ", list.UUID)
 	if list.UUID == "" {
 		//TODO: THROW SERVER ERROR HERE
 	} else {
@@ -116,10 +116,10 @@ func GetListsAndItemsAndLMsWith(w http.ResponseWriter, r *http.Request) {
 	for _, listMember := range listMembersForUser {
 		var list List
 		db.Where("UUID = ?", listMember.ListID).Find(&list)
-		fmt.Println("list member UUID", listMember.UUID)
-		fmt.Println("list title ", list.Title)
-		fmt.Println("list UUID ", list.UUID)
-		fmt.Println("listmember listID ", listMember.ListID)
+		// fmt.Println("list member UUID", listMember.UUID)
+		// fmt.Println("list title ", list.Title)
+		// fmt.Println("list UUID ", list.UUID)
+		// fmt.Println("listmember listID ", listMember.ListID)
 
 		if list.UUID == listMember.ListID {
 			lists = append(lists, list)
